@@ -4,17 +4,19 @@ import {
   SearchIcon,
   LibraryIcon,
   PlusCircleIcon,
-  HeartIcon,
   RssIcon,
 } from '@heroicons/react/outline'
-import { signOut, useSession } from 'next-auth/react'
+import { HeartIcon } from '@heroicons/react/solid'
+import { useSession } from 'next-auth/react'
+import { useRecoilState } from 'recoil'
+import { playlistIdState } from '../atoms/playlistAtom'
 import useSpotify from '../hooks/useSpotify'
 
 export default function Sidebar() {
   const spotifyApi = useSpotify()
   const { data: session, status } = useSession()
   const [playlists, setPlaylists] = useState([])
-  const [playlistId, setPlaylistId] = useState(null)
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -25,12 +27,8 @@ export default function Sidebar() {
   }, [session, spotifyApi])
   
   return (
-    <div className="text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
+    <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
       <div className="space-y-4">
-        <button className="flex items-center space-x-2 hover:text-white" onClick={() => signOut()}>
-          <HomeIcon className="h-5 w-5" />
-          <p>Log out</p>
-        </button>
         <button className="flex items-center space-x-2 hover:text-white">
           <HomeIcon className="h-5 w-5" />
           <p>Home</p>
@@ -49,11 +47,11 @@ export default function Sidebar() {
           <p>Create Playlist</p>
         </button>
         <button className="flex items-center space-x-2 hover:text-white">
-          <HeartIcon className="h-5 w-5" />
+          <HeartIcon className="h-5 w-5 text-blue-500" />
           <p>Liked Songs</p>
         </button>
         <button className="flex items-center space-x-2 hover:text-white">
-          <RssIcon className="h-5 w-5" />
+          <RssIcon className="h-5 w-5 text-green-500" />
           <p>Your Episodes</p>
         </button>
         <hr className="border-t-[0.1px] border-gray-900" />
